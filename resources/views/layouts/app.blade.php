@@ -5,24 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Kanban Board</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <style>
-        /* Theme Colors - Biru Tua + Hijau */
         :root {
-            --primary-dark: #1e3a5f;
-            --primary-light: #2d4a7c;
-            --primary-soft: #e8f0fe;
-            --accent-dark: #10b981;
-            --accent-light: #34d399;
-            --accent-soft: #d1fae5;
-            --bg-gray: #f3f4f6;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --success: #10b981;
+            --primary-dark: #071a3d;
+            --primary-light: #123b7a;
+            --primary-soft: #eaf2ff;
+            --accent-dark: #123b7a;
+            --accent-light: #2b5ca8;
+            --accent-soft: #eef5ff;
+            --bg-primary: #f6f8fb;
+            --bg-gray: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --line: #d8e2ee;
+            --soft-line: #e3ebf5;
+            --success: #15803d;
             --danger: #ef4444;
             --warning: #f59e0b;
-            --info: #3b82f6;
+            --info: #123b7a;
         }
         
  /* ==============================================
@@ -221,8 +225,11 @@
         }
         
         body {
-            background-color: var(--bg-primary);
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background:
+                radial-gradient(circle at top right, rgba(18, 59, 122, .08), transparent 34rem),
+                linear-gradient(180deg, #f8fbff 0%, var(--bg-primary) 100%);
+            color: var(--text-dark);
+            font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         
@@ -347,7 +354,7 @@
         }
         
         ::-webkit-scrollbar-track {
-            background: #e5e7eb;
+            background: #e7eef7;
             border-radius: 4px;
         }
         
@@ -361,7 +368,7 @@
         }
         
         .btn-primary {
-            background-color: var(--primary-dark);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
             color: white;
             transition: all 0.2s ease;
             border-radius: 0.5rem;
@@ -372,13 +379,13 @@
         }
         
         .btn-primary:hover {
-            background-color: var(--primary-light);
+            background: linear-gradient(135deg, #061532, var(--primary-light));
             transform: translateY(-1px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
         .btn-accent {
-            background-color: var(--accent-dark);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
             color: white;
             transition: all 0.2s ease;
             border-radius: 0.5rem;
@@ -389,7 +396,7 @@
         }
         
         .btn-accent:hover {
-            background-color: var(--accent-light);
+            background: linear-gradient(135deg, #061532, var(--accent-light));
             transform: translateY(-1px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
@@ -430,35 +437,37 @@
         
         .board-card {
             background: white;
-            border-radius: 1rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--line);
+            border-radius: 0.5rem;
+            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
             transition: all 0.2s ease;
             overflow: hidden;
         }
         
         .board-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #bfd4f3;
+            box-shadow: 0 18px 42px rgba(15, 23, 42, 0.1);
         }
         
         .board-card-accent {
             height: 4px;
-            background-color: var(--accent-dark);
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary-light));
         }
         
         .board-card-primary {
             height: 4px;
-            background-color: var(--primary-dark);
+            background: linear-gradient(90deg, var(--primary-light), #6b8fc6);
         }
         
         .task-card {
             background: white;
-            border-radius: 0.75rem;
+            border-radius: 0.5rem;
             padding: 0.75rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
             transition: all 0.2s ease;
             cursor: grab;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--soft-line);
         }
         
         .task-card:active {
@@ -467,20 +476,22 @@
         
         .task-card:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border-color: var(--accent-light);
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+            border-color: #bfd4f3;
         }
         
         .kanban-list {
-            background: #f1f5f9;
-            border-radius: 0.75rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
+            border: 1px solid var(--line);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
             position: relative;
         }
         
         .list-header {
-            background: #e2e8f0;
-            border-radius: 0.75rem 0.75rem 0 0;
+            background: #fff;
+            border-bottom: 1px solid var(--soft-line);
+            border-radius: 0.5rem 0.5rem 0 0;
             padding: 0.75rem;
             font-weight: 600;
             cursor: move;
@@ -583,6 +594,98 @@
             color: #dc2626;
             border-left: 3px solid #ef4444;
             font-weight: bold;
+        }
+
+        .app-topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, .04);
+        }
+
+        .brand-mark {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: .5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+        }
+
+        .nav-action {
+            color: #52657d;
+            border: 1px solid transparent;
+        }
+
+        .nav-action:hover {
+            color: var(--primary-light);
+            background: var(--primary-soft);
+            border-color: #d8e5f4;
+        }
+
+        .avatar-fallback {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+        }
+
+        body > nav {
+            background: #fff !important;
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, .04) !important;
+        }
+
+        body > nav a,
+        body > nav button,
+        body > nav span {
+            color: var(--primary-dark) !important;
+        }
+
+        body > nav a:hover,
+        body > nav button:hover {
+            color: var(--primary-light) !important;
+        }
+
+        body > nav a[href="{{ route('home') }}"] span:first-child {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: .5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: transparent !important;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+            position: relative;
+        }
+
+        body > nav a[href="{{ route('home') }}"] span:first-child::after {
+            content: "K";
+            color: #fff;
+            font-weight: 800;
+            position: absolute;
+        }
+
+        body > nav a[href="{{ route('register') }}"] {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light)) !important;
+            color: #fff !important;
+            border-radius: .5rem;
+            font-weight: 700;
+        }
+
+        body > nav #user-menu-button,
+        body > nav .search-link,
+        body > nav #darkModeToggle,
+        body > nav #notification-button {
+            border: 1px solid transparent;
+        }
+
+        body > nav #user-menu-button:hover,
+        body > nav .search-link:hover,
+        body > nav #darkModeToggle:hover,
+        body > nav #notification-button:hover {
+            background: var(--primary-soft) !important;
+            border-color: #d8e5f4;
         }
         
         @keyframes pulse-red {
