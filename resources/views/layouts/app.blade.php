@@ -9,6 +9,36 @@
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script>
+        window.appBaseUrl = window.appBaseUrl || @json(rtrim(url('/'), '/'));
+        window.appUrl = window.appUrl || function(path) {
+            return `${window.appBaseUrl}/${String(path).replace(/^\/+/, '')}`;
+        };
+
+        (function() {
+            const nativeFetch = window.fetch.bind(window);
+            const appPrefixes = [
+                'api', 'attachments', 'boards', 'checklists', 'checklist-items',
+                'comments', 'custom-fields', 'labels', 'lists', 'notifications',
+                'search', 'tasks', 'templates'
+            ];
+
+            function shouldUseAppUrl(path) {
+                return appPrefixes.some(prefix => path === prefix || path.startsWith(`${prefix}/`) || path.startsWith(`${prefix}?`));
+            }
+
+            window.fetch = function(input, init) {
+                if (typeof input === 'string' && input.startsWith('/') && !input.startsWith('//')) {
+                    const path = input.replace(/^\/+/, '');
+                    if (shouldUseAppUrl(path)) {
+                        return nativeFetch(window.appUrl(path), init);
+                    }
+                }
+
+                return nativeFetch(input, init);
+            };
+        })();
+    </script>
     <style>
         :root {
             --primary-dark: #071a3d;
@@ -833,11 +863,6 @@
     @stack('scripts')
     
     <script>
-        window.appBaseUrl = window.appBaseUrl || @json(rtrim(url('/'), '/'));
-        window.appUrl = window.appUrl || function(path) {
-            return `${window.appBaseUrl}/${String(path).replace(/^\/+/, '')}`;
-        };
-
         // ==============================================
         // DARK MODE FUNCTIONALITY
         // ==============================================
