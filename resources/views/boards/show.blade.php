@@ -1628,9 +1628,33 @@ function initDragToScroll() {
 // INITIALIZE ALL ON PAGE LOAD
 // ==============================================
 
+function initAutoRefresh() {
+    const refreshIntervalMs = 10000;
+
+    function isUserWorking() {
+        const active = document.activeElement;
+        const isTyping = active && (
+            active.matches('input, textarea, select, [contenteditable="true"]') ||
+            active.closest('form')
+        );
+        const visibleModal = document.querySelector('.modal:not(.hidden), [id$="Modal"]:not(.hidden), .fixed.inset-0:not(.hidden)');
+        const isDragging = document.querySelector('.dragging, .sortable-chosen, .sortable-drag');
+        const hasOpenFilePicker = document.querySelector('input[type="file"]');
+
+        return document.hidden || isTyping || visibleModal || isDragging || hasOpenFilePicker;
+    }
+
+    setInterval(() => {
+        if (!isUserWorking()) {
+            window.location.reload();
+        }
+    }, refreshIntervalMs);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     initZoom();
     initDragToScroll();
+    initAutoRefresh();
     
     const listNameInput = document.getElementById('autoArchiveListName');
     const daysInput = document.getElementById('autoArchiveDays');
