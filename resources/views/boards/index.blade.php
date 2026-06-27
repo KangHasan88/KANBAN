@@ -139,7 +139,7 @@ function openEditBoardModal(id, name, description) {
     document.getElementById('editBoardId').value = id;
     document.getElementById('editBoardName').value = name;
     document.getElementById('editBoardDescription').value = description || '';
-    document.getElementById('editBoardForm').action = `/boards/${id}`;
+    document.getElementById('editBoardForm').action = appUrl(`boards/${id}`);
     document.getElementById('editBoardModal').classList.remove('hidden');
 }
 

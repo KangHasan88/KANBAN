@@ -1042,7 +1042,7 @@ function applyZoom(zoom) {
 // ==============================================
 
 function removeLabelFromTaskCard(taskId, labelId) {
-    fetch(`/tasks/${taskId}/labels/${labelId}`, {
+    fetch(appUrl(`tasks/${taskId}/labels/${labelId}`), {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -1207,7 +1207,7 @@ function loadTemplates() {
     const container = document.getElementById('templatesList');
     container.innerHTML = '<div class="flex justify-center py-12"><div class="spinner w-8 h-8 border-2 border-gray-300 border-t-[#1e3a5f] rounded-full animate-spin"></div></div>';
     
-    fetch(`/boards/${boardId}/templates`, { headers: { 'Accept': 'application/json' } })
+    fetch(appUrl(`boards/${boardId}/templates`), { headers: { 'Accept': 'application/json' } })
     .then(response => response.json())
     .then(templates => {
         const countSpan = document.getElementById('templatesCount');
@@ -1270,7 +1270,7 @@ function useTemplate(templateId) {
     const listId = select?.value;
     if (!listId) { showNotification('Please select a list first', 'error'); return; }
     showNotification('Creating task from template...', 'info');
-    fetch(`/templates/${templateId}/create-task`, {
+    fetch(appUrl(`templates/${templateId}/create-task`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' },
         body: JSON.stringify({ task_list_id: listId })
@@ -1287,7 +1287,7 @@ function useTemplate(templateId) {
 
 function deleteTemplate(templateId) {
     if (!confirm('Are you sure you want to delete this template?')) return;
-    fetch(`/templates/${templateId}`, {
+    fetch(appUrl(`templates/${templateId}`), {
         method: 'DELETE',
         headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' }
     })
@@ -1354,7 +1354,7 @@ function uploadAndSetAsCover(taskId, file) {
     const formData = new FormData();
     formData.append('file', file);
     
-    fetch(`/tasks/${taskId}/attachments`, {
+    fetch(appUrl(`tasks/${taskId}/attachments`), {
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
         credentials: 'same-origin',
@@ -1363,7 +1363,7 @@ function uploadAndSetAsCover(taskId, file) {
     .then(response => response.json())
     .then(data => {
         if (data.success && data.attachment) {
-            return fetch(`/attachments/${data.attachment.id}/set-cover`, {
+            return fetch(appUrl(`attachments/${data.attachment.id}/set-cover`), {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' },
                 credentials: 'same-origin'
@@ -1390,7 +1390,7 @@ function uploadAndSetAsCover(taskId, file) {
 function removeCoverFromCard(taskId) {
     if (!confirm('Remove cover image from this task?')) return;
     showNotification('Removing cover...', 'info');
-    fetch(`/tasks/${taskId}/remove-cover`, {
+    fetch(appUrl(`tasks/${taskId}/remove-cover`), {
         method: 'DELETE',
         headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' },
         credentials: 'same-origin'
@@ -1476,7 +1476,7 @@ function toggleCoverSetting() {
         return;
     }
     
-    fetch(`{{ url('/api/toggle-cover') }}/${boardId}`, {
+    fetch(appUrl(`api/toggle-cover/${boardId}`), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

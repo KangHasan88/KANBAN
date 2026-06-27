@@ -833,6 +833,11 @@
     @stack('scripts')
     
     <script>
+        window.appBaseUrl = window.appBaseUrl || @json(rtrim(url('/'), '/'));
+        window.appUrl = window.appUrl || function(path) {
+            return `${window.appBaseUrl}/${String(path).replace(/^\/+/, '')}`;
+        };
+
         // ==============================================
         // DARK MODE FUNCTIONALITY
         // ==============================================
@@ -899,7 +904,7 @@
                 if (isLoading) return;
                 isLoading = true;
                 
-                fetch('/notifications?page=1', {
+                fetch(appUrl('notifications?page=1'), {
                     headers: {
                         'Accept': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
@@ -965,7 +970,7 @@
                     const timeAgo = getTimeAgo(date);
                     
                     const taskIdParam = notif.task_id ? `?task_id=${notif.task_id}` : '';
-                    const boardLink = notif.board_id ? `/boards/${notif.board_id}${taskIdParam}` : '#';
+                    const boardLink = notif.board_id ? appUrl(`boards/${notif.board_id}${taskIdParam}`) : '#';
                     
                     html += `
                         <a href="${boardLink}" 
@@ -1013,7 +1018,7 @@
             }
             
             window.markNotificationAsRead = function(id) {
-                fetch(`/notifications/${id}/read`, {
+                fetch(appUrl(`notifications/${id}/read`), {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -1025,7 +1030,7 @@
             };
             
             window.markAllNotificationsAsRead = function() {
-                fetch('/notifications/mark-all-read', {
+                fetch(appUrl('notifications/mark-all-read'), {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
