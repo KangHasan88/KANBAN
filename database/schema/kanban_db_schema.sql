@@ -300,21 +300,6 @@ CREATE TABLE `recurring_tasks` (
   CONSTRAINT `recurring_tasks_task_id_foreign` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `sessions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sessions` (
-  `id` varchar(255) NOT NULL,
-  `user_id` bigint unsigned DEFAULT NULL,
-  `ip_address` varchar(45) DEFAULT NULL,
-  `user_agent` text,
-  `payload` longtext NOT NULL,
-  `last_activity` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sessions_user_id_index` (`user_id`),
-  KEY `sessions_last_activity_index` (`last_activity`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `task_activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -542,29 +527,29 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (4,'2026_04_24_0658
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (5,'2026_04_24_065823_create_task_lists_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (6,'2026_04_24_065827_create_tasks_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (7,'2026_04_24_065831_create_task_activities_table',1);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (8,'2026_04_24_095847_create_board_user_table',2);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (9,'2026_04_24_101316_add_details_to_task_activities_table',3);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (10,'2026_04_27_044134_create_labels_table',4);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (11,'2026_04_27_044253_create_task_label_table',4);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (12,'2026_04_28_064006_add_role_to_users_table',5);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (13,'2026_04_28_073357_create_checklists_table',6);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (14,'2026_04_28_073404_create_checklist_items_table',6);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (15,'2026_05_05_031752_add_soft_deletes_to_users_table',7);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (16,'2026_05_05_043546_create_comments_table',8);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (17,'2026_05_05_043635_create_comment_likes_table',8);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (18,'2026_05_05_061102_create_notifications_table',9);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (19,'2026_05_05_095406_create_task_attachments_table',10);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (20,'2026_05_05_101827_add_is_cover_to_task_attachments_table',11);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (21,'2026_05_06_074734_create_task_user_table',12);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (22,'2026_05_06_080854_drop_assigned_to_from_tasks_table',13);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (23,'2026_05_06_095829_add_archived_at_to_tasks_table',14);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (24,'2026_05_07_020018_add_auto_archive_settings_to_boards_table',15);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (25,'2026_05_07_064352_create_task_templates_table',16);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (26,'2026_05_08_080903_create_task_watchers_table',17);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (27,'2026_05_11_025735_create_custom_fields_table',18);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (28,'2026_05_11_042138_create_recurring_tasks_table',19);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (29,'2026_05_11_055606_create_time_entries_table',20);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (30,'2026_05_13_040757_add_cover_enabled_to_boards_table',21);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (31,'2026_05_13_095614_add_cover_enabled_to_tasks_table',22);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (32,'2026_05_15_091512_add_gantt_fields_to_tasks_table',23);
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (33,'2026_05_15_091612_create_gantt_settings_table',23);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (8,'2026_04_24_095847_create_board_user_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (9,'2026_04_24_101316_add_details_to_task_activities_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (10,'2026_04_27_044134_create_labels_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (11,'2026_04_27_044253_create_task_label_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (12,'2026_04_28_064006_add_role_to_users_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (13,'2026_04_28_073357_create_checklists_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (14,'2026_04_28_073404_create_checklist_items_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (15,'2026_05_05_031752_add_soft_deletes_to_users_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (16,'2026_05_05_043546_create_comments_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (17,'2026_05_05_043635_create_comment_likes_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (18,'2026_05_05_061102_create_notifications_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (19,'2026_05_05_095406_create_task_attachments_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (20,'2026_05_05_101827_add_is_cover_to_task_attachments_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (21,'2026_05_06_074734_create_task_user_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (22,'2026_05_06_080854_drop_assigned_to_from_tasks_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (23,'2026_05_06_095829_add_archived_at_to_tasks_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (24,'2026_05_07_020018_add_auto_archive_settings_to_boards_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (25,'2026_05_07_064352_create_task_templates_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (26,'2026_05_08_080903_create_task_watchers_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (27,'2026_05_11_025735_create_custom_fields_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (28,'2026_05_11_042138_create_recurring_tasks_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (29,'2026_05_11_055606_create_time_entries_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (30,'2026_05_13_040757_add_cover_enabled_to_boards_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (31,'2026_05_13_095614_add_cover_enabled_to_tasks_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (32,'2026_05_15_091512_add_gantt_fields_to_tasks_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (33,'2026_05_15_091612_create_gantt_settings_table',1);

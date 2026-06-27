@@ -8,14 +8,14 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('tasks', function (Blueprint $table) {
+        Schema::table('boards', function (Blueprint $table) {
             $table->boolean('cover_enabled')->default(true);
         });
     }
 
     public function down()
     {
-        Schema::table('tasks', function (Blueprint $table) {
+        Schema::table('boards', function (Blueprint $table) {
             $table->dropColumn('cover_enabled');
         });
     }
