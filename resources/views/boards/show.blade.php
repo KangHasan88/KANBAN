@@ -1476,7 +1476,7 @@ function toggleCoverSetting() {
         return;
     }
     
-    fetch(`/api/toggle-cover/${boardId}`, {
+    fetch(`{{ url('/api/toggle-cover') }}/${boardId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
