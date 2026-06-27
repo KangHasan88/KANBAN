@@ -304,7 +304,7 @@ function openTaskDetail(taskId) {
     if (typeof openTaskDetailModal === 'function') {
         openTaskDetailModal(taskId);
     } else {
-        window.location.href = `/tasks/${taskId}/edit`;
+        window.location.href = appUrl(`tasks/${taskId}/edit`);
     }
 }
 

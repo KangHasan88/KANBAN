@@ -238,7 +238,7 @@ function renderActivities(activities) {
                             <span class="text-sm text-gray-600">${escapeHtml(activity.action_text)}</span>
                         </div>
                         <div class="mt-1">
-                            <a href="#" onclick="event.stopPropagation(); window.location.href='/tasks/${activity.task_id}/edit'" class="text-sm font-medium text-[#1e3a5f] hover:underline">
+                            <a href="#" onclick="event.stopPropagation(); window.location.href=appUrl('tasks/${activity.task_id}/edit')" class="text-sm font-medium text-[#1e3a5f] hover:underline">
                                 ${escapeHtml(activity.task_title)}
                             </a>
                         </div>
@@ -377,7 +377,7 @@ function openTaskDetail(taskId) {
     if (taskId && typeof openTaskDetailModal === 'function') {
         openTaskDetailModal(taskId);
     } else if (taskId) {
-        window.location.href = `/tasks/${taskId}/edit`;
+        window.location.href = appUrl(`tasks/${taskId}/edit`);
     }
 }
 
