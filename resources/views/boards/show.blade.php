@@ -289,7 +289,7 @@
                         </div>
                     </div>
                     <div class="resize-handle" data-list-id="{{ $list->id }}"></div>
-                    <div class="list-tasks p-3 space-y-2 min-h-32 custom-scrollbar" data-list-id="{{ $list->id }}">
+                    <div class="list-tasks p-3 space-y-2 min-h-32" data-list-id="{{ $list->id }}">
                        @foreach($list->tasks as $task)
 @php
     $cover = $task->attachments->where('is_cover', true)->first();
@@ -928,7 +928,7 @@
     }
     .kanban-board-container {
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: auto;
         scrollbar-width: auto;
         position: relative;
         cursor: grab;
@@ -937,18 +937,17 @@
         min-height: 460px;
     }
     .kanban-board {
-        height: 100%;
+        min-height: 100%;
         min-width: max-content;
     }
     .kanban-list {
         display: flex;
         flex-direction: column;
-        height: 100%;
-        max-height: 100%;
+        min-height: 100%;
         background: #f8fafc;
         border: 1px solid #d8e2ee;
         border-radius: 0.5rem;
-        overflow: hidden;
+        overflow: visible;
     }
     .dark .kanban-list {
         background: #1e293b;
@@ -959,11 +958,8 @@
         flex-shrink: 0;
     }
     .list-tasks {
-        flex: 1 1 auto;
-        overflow-y: auto;
-        overflow-x: hidden;
-        min-height: 0;
-        overscroll-behavior: contain;
+        flex: 1 0 auto;
+        overflow: visible;
     }
     .kanban-board-container:active {
         cursor: grabbing;
