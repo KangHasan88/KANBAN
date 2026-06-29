@@ -1598,8 +1598,6 @@ function initDragToScroll() {
         startDragY = e.clientY;
         startScrollLeft = container.scrollLeft;
         startScrollTop = container.scrollTop;
-
-        container.setPointerCapture?.(e.pointerId);
     });
 
     container.addEventListener('pointermove', (e) => {
@@ -1615,6 +1613,7 @@ function initDragToScroll() {
             suppressNextBoardClick = true;
             container.style.cursor = 'grabbing';
             container.classList.add('dragging');
+            container.setPointerCapture?.(e.pointerId);
         }
 
         if (!isDraggingScroll) return;
