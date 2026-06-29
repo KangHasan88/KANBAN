@@ -932,6 +932,8 @@
         overflow-y: visible;
         scrollbar-width: auto;
         position: relative;
+        cursor: grab;
+        overscroll-behavior: contain;
     }
     .kanban-board-container:active {
         cursor: grabbing;
@@ -1529,6 +1531,9 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==============================================
 
 let isDraggingScroll = false;
+let isPointerDownForScroll = false;
+let suppressNextBoardClick = false;
+let scrollPointerId = null;
 let startDragX, startDragY;
 let startScrollLeft, startScrollTop;
 
@@ -1536,59 +1541,85 @@ function initDragToScroll() {
     const container = document.querySelector('.kanban-board-container');
     
     if (!container) return;
+
+    function isInteractiveTarget(target) {
+        return target.closest('button, input, textarea, select, a, label, [contenteditable="true"], .resize-handle, .task-bulk-checkbox');
+    }
+
+    function shouldStartBoardPan(event) {
+        if (event.button !== 0 || isInteractiveTarget(event.target)) {
+            return false;
+        }
+
+        // Keep normal card/list-header dragging available for Kanban sorting.
+        return !event.target.closest('.task-card, .list-header');
+    }
+
+    function stopBoardPan() {
+        isDraggingScroll = false;
+        isPointerDownForScroll = false;
+        scrollPointerId = null;
+        container.style.cursor = 'grab';
+        container.classList.remove('dragging');
+    }
     
     // ==============================================
     // 1. Drag to scroll (Horizontal & Vertical)
     // ==============================================
-    container.addEventListener('mousedown', (e) => {
-        // Jangan aktif jika klik pada tombol, input, textarea, select, atau task card
-        if (e.target.closest('button') || 
-            e.target.closest('input') || 
-            e.target.closest('textarea') || 
-            e.target.closest('select') ||
-            e.target.closest('.task-card') ||
-            e.target.closest('.list-header')) {
+    container.addEventListener('pointerdown', (e) => {
+        if (!shouldStartBoardPan(e)) {
             return;
         }
-        
-        isDraggingScroll = true;
-        container.style.cursor = 'grabbing';
-        container.classList.add('dragging');
-        startDragX = e.pageX - container.offsetLeft;
-        startDragY = e.pageY - container.offsetTop;
+
+        isPointerDownForScroll = true;
+        suppressNextBoardClick = false;
+        scrollPointerId = e.pointerId;
+        startDragX = e.clientX;
+        startDragY = e.clientY;
         startScrollLeft = container.scrollLeft;
         startScrollTop = container.scrollTop;
-        
-        e.preventDefault();
+
+        container.setPointerCapture?.(e.pointerId);
     });
-    
-    container.addEventListener('mouseleave', () => {
-        if (isDraggingScroll) {
-            isDraggingScroll = false;
-            container.style.cursor = 'grab';
-            container.classList.remove('dragging');
+
+    container.addEventListener('pointermove', (e) => {
+        if (!isPointerDownForScroll || e.pointerId !== scrollPointerId) return;
+
+        const walkX = e.clientX - startDragX;
+        const walkY = e.clientY - startDragY;
+
+        if (!isDraggingScroll && (Math.abs(walkX) > 4 || Math.abs(walkY) > 4)) {
+            isDraggingScroll = true;
+            suppressNextBoardClick = true;
+            container.style.cursor = 'grabbing';
+            container.classList.add('dragging');
         }
-    });
-    
-    container.addEventListener('mouseup', () => {
-        if (isDraggingScroll) {
-            isDraggingScroll = false;
-            container.style.cursor = 'grab';
-            container.classList.remove('dragging');
-        }
-    });
-    
-    container.addEventListener('mousemove', (e) => {
+
         if (!isDraggingScroll) return;
+
         e.preventDefault();
-        
-        const x = e.pageX - container.offsetLeft;
-        const y = e.pageY - container.offsetTop;
-        const walkX = (x - startDragX) * 1.5;
-        const walkY = (y - startDragY) * 1.5;
-        
         container.scrollLeft = startScrollLeft - walkX;
         container.scrollTop = startScrollTop - walkY;
+    });
+
+    container.addEventListener('pointerup', stopBoardPan);
+    container.addEventListener('pointercancel', stopBoardPan);
+    container.addEventListener('lostpointercapture', stopBoardPan);
+
+    container.addEventListener('click', (e) => {
+        if (suppressNextBoardClick) {
+            e.preventDefault();
+            e.stopPropagation();
+            suppressNextBoardClick = false;
+            stopBoardPan();
+        }
+    }, true);
+
+    // Trackpad horizontal gestures should move the board horizontally.
+    container.addEventListener('wheel', function(e) {
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+            container.scrollLeft += e.deltaX;
+        }
     });
     
     // ==============================================
