@@ -935,7 +935,6 @@
         overscroll-behavior: contain;
         height: calc(100vh - 230px);
         min-height: 460px;
-        max-height: calc(100vh - 180px);
     }
     .kanban-board {
         height: 100%;
@@ -944,6 +943,7 @@
     .kanban-list {
         display: flex;
         flex-direction: column;
+        height: 100%;
         max-height: 100%;
         background: #f8fafc;
         border: 1px solid #d8e2ee;
@@ -953,6 +953,10 @@
     .dark .kanban-list {
         background: #1e293b;
         border-color: #374151;
+    }
+    .list-header,
+    .resize-handle {
+        flex-shrink: 0;
     }
     .list-tasks {
         flex: 1 1 auto;
@@ -1057,7 +1061,7 @@ function applyZoom(zoom) {
     boardContainer.style.transform = `scale(${zoomLevel})`;
     boardContainer.style.transformOrigin = 'top left';
     boardContainer.style.width = zoomLevel === 1 ? '' : `${100 / zoomLevel}%`;
-    
+
     window.dispatchEvent(new Event('resize'));
 }
 
