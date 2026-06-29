@@ -339,7 +339,6 @@
 
 <div class="task-card group cursor-pointer bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all overflow-hidden {{ $isAging ? 'card-aging' : '' }}" 
      data-task-id="{{ $task->id }}" 
-     draggable="{{ $permission !== 'view' }}" 
      onclick="if (!event.target.closest('button') && !event.target.closest('.task-bulk-checkbox')) openTaskDetailModal({{ $task->id }})"
      @if($agingStyle) style="{{ $agingStyle }}" @endif>
     
@@ -973,6 +972,7 @@
         user-select: none;
         -webkit-user-select: none;
         cursor: grabbing !important;
+        scroll-behavior: auto !important;
     }
 </style>
 
@@ -1551,8 +1551,7 @@ function initDragToScroll() {
             return false;
         }
 
-        // Keep normal card/list-header dragging available for Kanban sorting.
-        return !event.target.closest('.task-card, .list-header');
+        return true;
     }
 
     function stopBoardPan() {
@@ -1588,7 +1587,9 @@ function initDragToScroll() {
         const walkX = e.clientX - startDragX;
         const walkY = e.clientY - startDragY;
 
-        if (!isDraggingScroll && (Math.abs(walkX) > 4 || Math.abs(walkY) > 4)) {
+        const isHorizontalPan = Math.abs(walkX) > 8 && Math.abs(walkX) > Math.abs(walkY) * 1.15;
+
+        if (!isDraggingScroll && isHorizontalPan) {
             isDraggingScroll = true;
             suppressNextBoardClick = true;
             container.style.cursor = 'grabbing';
