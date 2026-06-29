@@ -3,6 +3,8 @@
     Header always add Set-Cookie "kurmigokanban-session=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; path=/; secure; HttpOnly; SameSite=Lax"
     Header always add Set-Cookie "kurmigo_kanban_session_v2=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; path=/kanban; secure; HttpOnly; SameSite=Lax"
     Header always add Set-Cookie "kurmigo_kanban_session_v2=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; path=/; secure; HttpOnly; SameSite=Lax"
+    Header always add Set-Cookie "kurmigo_kanban_session_v3=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; path=/kanban; secure; HttpOnly; SameSite=Lax"
+    Header always add Set-Cookie "kurmigo_kanban_session_v3=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; path=/; secure; HttpOnly; SameSite=Lax"
 </IfModule>
 
 <IfModule mod_rewrite.c>
