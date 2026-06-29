@@ -270,8 +270,8 @@
         </div>
         
         <!-- Kanban Board Container with Zoom -->
-        <div class="kanban-board-container overflow-x-auto pb-4" style="min-height: 70vh; cursor: grab;" id="kanbanBoardContainer">
-            <div class="kanban-board flex items-start gap-4" id="kanbanBoard">
+        <div class="kanban-board-container overflow-x-auto pb-4" id="kanbanBoardContainer">
+            <div class="kanban-board flex items-stretch gap-4" id="kanbanBoard">
                 @foreach($board->lists as $list)
                 <div class="kanban-list flex-shrink-0" data-list-id="{{ $list->id }}" style="width: {{ session('list_width_' . $list->id, 320) }}px; min-width: 250px;">
                     <div class="list-header rounded-t-lg p-3 cursor-move" style="background-color: {{ $list->color }}; color: {{ $list->color == '#e2e8f0' || $list->color == '#f3f4f6' || $list->color == '#ffffff' || $list->color == '#f1f5f9' ? '#1f2937' : 'white' }};">
@@ -289,7 +289,7 @@
                         </div>
                     </div>
                     <div class="resize-handle" data-list-id="{{ $list->id }}"></div>
-                    <div class="list-tasks p-3 space-y-2 min-h-32" data-list-id="{{ $list->id }}">
+                    <div class="list-tasks p-3 space-y-2 min-h-32 custom-scrollbar" data-list-id="{{ $list->id }}">
                        @foreach($list->tasks as $task)
 @php
     $cover = $task->attachments->where('is_cover', true)->first();
@@ -928,10 +928,37 @@
     }
     .kanban-board-container {
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         scrollbar-width: auto;
         position: relative;
         cursor: grab;
+        overscroll-behavior: contain;
+        height: calc(100vh - 230px);
+        min-height: 460px;
+        max-height: calc(100vh - 180px);
+    }
+    .kanban-board {
+        height: 100%;
+        min-width: max-content;
+    }
+    .kanban-list {
+        display: flex;
+        flex-direction: column;
+        max-height: 100%;
+        background: #f8fafc;
+        border: 1px solid #d8e2ee;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+    .dark .kanban-list {
+        background: #1e293b;
+        border-color: #374151;
+    }
+    .list-tasks {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-height: 0;
         overscroll-behavior: contain;
     }
     .kanban-board-container:active {
@@ -1029,12 +1056,7 @@ function applyZoom(zoom) {
     const zoomLevel = zoom / 100;
     boardContainer.style.transform = `scale(${zoomLevel})`;
     boardContainer.style.transformOrigin = 'top left';
-    
-    const parent = boardContainer.parentElement;
-    if (parent) {
-        const originalHeight = boardContainer.scrollHeight;
-        parent.style.height = `${(originalHeight * zoomLevel) + 100}px`;
-    }
+    boardContainer.style.width = zoomLevel === 1 ? '' : `${100 / zoomLevel}%`;
     
     window.dispatchEvent(new Event('resize'));
 }
