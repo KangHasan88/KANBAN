@@ -271,7 +271,7 @@
         
         <!-- Kanban Board Container with Zoom -->
         <div class="kanban-board-container overflow-x-auto pb-4" id="kanbanBoardContainer">
-            <div class="kanban-board flex items-stretch gap-4" id="kanbanBoard">
+            <div class="kanban-board flex items-start gap-4" id="kanbanBoard">
                 @foreach($board->lists as $list)
                 <div class="kanban-list flex-shrink-0" data-list-id="{{ $list->id }}" style="width: {{ session('list_width_' . $list->id, 320) }}px; min-width: 250px;">
                     <div class="list-header rounded-t-lg p-3 cursor-move" style="background-color: {{ $list->color }}; color: {{ $list->color == '#e2e8f0' || $list->color == '#f3f4f6' || $list->color == '#ffffff' || $list->color == '#f1f5f9' ? '#1f2937' : 'white' }};">
@@ -943,7 +943,6 @@
     .kanban-list {
         display: flex;
         flex-direction: column;
-        min-height: 100%;
         background: #f8fafc;
         border: 1px solid #d8e2ee;
         border-radius: 0.5rem;
@@ -958,7 +957,7 @@
         flex-shrink: 0;
     }
     .list-tasks {
-        flex: 1 0 auto;
+        flex: 0 0 auto;
         overflow: visible;
     }
     .kanban-board-container:active {
